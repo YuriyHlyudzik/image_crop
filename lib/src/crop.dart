@@ -640,9 +640,24 @@ class _CropPainter extends CustomPainter {
     if (!boundaries.isEmpty) {
       _drawGrid(canvas, boundaries);
       _drawHandles(canvas, boundaries);
+      _drawCircle(canvas, boundaries);
     }
 
     canvas.restore();
+  }
+
+  void _drawCircle(Canvas canvas, Rect boundaries) {
+    print('drawing circle ${boundaries}');
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..strokeCap = StrokeCap.round
+      ..color = _kCropHandleColor
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(
+        Offset(boundaries.width / 2 + boundaries.left, boundaries.width / 2),
+        boundaries.width / 2,
+        paint);
   }
 
   void _drawHandles(Canvas canvas, Rect boundaries) {
