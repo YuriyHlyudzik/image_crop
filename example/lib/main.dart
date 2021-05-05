@@ -58,11 +58,7 @@ class _MyAppState extends State<MyApp> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: Crop.file(
-            _sample,
-            key: cropKey,
-            aspectRatio: 1 / 2,
-          ),
+          child: Crop.file(_sample, key: cropKey),
         ),
         Container(
           padding: const EdgeInsets.only(top: 20.0),
@@ -122,24 +118,23 @@ class _MyAppState extends State<MyApp> {
       return;
     }
 
-    print('current scale = $scale\n current area = $area');
     // scale up to use maximum possible number of pixels
     // this will sample image in higher resolution to make cropped image larger
-    // final sample = await ImageCrop.sampleImage(
-    //   file: _file,
-    //   preferredSize: (2000 / scale).round(),
-    // );
+    final sample = await ImageCrop.sampleImage(
+      file: _file,
+      preferredSize: (2000 / scale).round(),
+    );
 
-    // final file = await ImageCrop.cropImage(
-    //   file: sample,
-    //   area: area,
-    // );
+    final file = await ImageCrop.cropImage(
+      file: sample,
+      area: area,
+    );
 
-    // sample.delete();
+    sample.delete();
 
-    // _lastCropped?.delete();
-    // _lastCropped = file;
+    _lastCropped?.delete();
+    _lastCropped = file;
 
-    // debugPrint('$file');
+    debugPrint('$file');
   }
 }
