@@ -19,6 +19,7 @@ class Crop extends StatefulWidget {
   final double maximumScale;
   final bool alwaysShowGrid;
   final ImageErrorListener onImageError;
+  final Function onImageSuccess;
 
   const Crop({
     Key key,
@@ -26,7 +27,8 @@ class Crop extends StatefulWidget {
     this.aspectRatio,
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
-    this.onImageError,
+    this.onImageError, 
+    this.onImageSuccess,
   })  : assert(image != null),
         assert(maximumScale != null),
         assert(alwaysShowGrid != null),
@@ -40,6 +42,7 @@ class Crop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
+    this.onImageSuccess,
   })  : image = FileImage(file, scale: scale),
         assert(maximumScale != null),
         assert(alwaysShowGrid != null),
@@ -54,6 +57,7 @@ class Crop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
+    this.onImageSuccess,
   })  : image = AssetImage(assetName, bundle: bundle, package: package),
         assert(maximumScale != null),
         assert(alwaysShowGrid != null),
@@ -299,6 +303,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin, Drag {
           viewWidth,
           viewHeight,
         );
+        widget.onImageSuccess?.call();
       });
     });
     WidgetsBinding.instance.ensureVisualUpdate();
