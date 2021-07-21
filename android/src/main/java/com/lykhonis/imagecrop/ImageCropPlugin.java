@@ -186,6 +186,15 @@ public final class ImageCropPlugin implements FlutterPlugin , ActivityAware, Met
 
                 int width = (int) (options.getWidth() * area.width() * scale);
                 int height = (int) (options.getHeight() * area.height() * scale);
+                if (width == 0 || height == 0) {
+                    ui(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.error("INVALID", "Image width or height cannot be 0", null);
+                        }
+                    });
+                    return;
+                }
 
                 Bitmap dstBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(dstBitmap);
