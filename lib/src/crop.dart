@@ -18,8 +18,8 @@ class Crop extends StatefulWidget {
   final double? aspectRatio;
   final double maximumScale;
   final bool alwaysShowGrid;
-  final ImageErrorListener onImageError;
-  final Function onImageSuccess;
+  final ImageErrorListener? onImageError;
+  final Function? onImageSuccess;
 
   const Crop({
     Key? key,
@@ -29,10 +29,7 @@ class Crop extends StatefulWidget {
     this.alwaysShowGrid = false,
     this.onImageError, 
     this.onImageSuccess,
-  })  : assert(image != null),
-        assert(maximumScale != null),
-        assert(alwaysShowGrid != null),
-        super(key: key);
+  })  : super(key: key);
 
   Crop.file(
     File file, {
