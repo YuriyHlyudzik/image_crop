@@ -300,7 +300,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin {
   }
 
   void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final boundaries = _boundaries;
       if (boundaries == null) {
         return;
