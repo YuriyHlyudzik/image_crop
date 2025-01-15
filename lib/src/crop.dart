@@ -20,6 +20,7 @@ class Crop extends StatefulWidget {
   final double maximumScale;
   final bool alwaysShowGrid;
   final ImageErrorListener? onImageError;
+  final Function? onImageSuccess;
 
   const Crop({
     Key? key,
@@ -28,6 +29,7 @@ class Crop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
+    this.onImageSuccess,
   }) : super(key: key);
 
   Crop.file(
@@ -38,6 +40,7 @@ class Crop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
+    this.onImageSuccess,
   })  : image = FileImage(file, scale: scale),
         super(key: key);
 
@@ -50,6 +53,7 @@ class Crop extends StatefulWidget {
     this.maximumScale = 2.0,
     this.alwaysShowGrid = false,
     this.onImageError,
+    this.onImageSuccess,
   })  : image = AssetImage(assetName, bundle: bundle, package: package),
         super(key: key);
 
@@ -296,12 +300,11 @@ class CropState extends State<Crop> with TickerProviderStateMixin {
   }
 
   void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
-    final boundaries = _boundaries;
-    if (boundaries == null) {
-      return;
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      final boundaries = _boundaries;
+      if (boundaries == null) {
+        return;
+      }
       final image = imageInfo.image;
 
       setState(() {
@@ -326,6 +329,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin {
           viewWidth,
           viewHeight,
         );
+        widget.onImageSuccess?.call();
       });
     });
 
@@ -552,29 +556,7 @@ class CropState extends State<Crop> with TickerProviderStateMixin {
     }
 
     if (_action == _CropAction.cropping) {
-      final boundaries = _boundaries;
-      if (boundaries == null) {
-        return;
-      }
-
-      final delta = details.focalPoint - _lastFocalPoint;
       _lastFocalPoint = details.focalPoint;
-
-      final dx = delta.dx / boundaries.width;
-      final dy = delta.dy / boundaries.height;
-
-      if (_handle == _CropHandleSide.topLeft) {
-        _updateArea(left: dx, top: dy, cropHandleSide: _CropHandleSide.topLeft);
-      } else if (_handle == _CropHandleSide.topRight) {
-        _updateArea(
-            top: dy, right: dx, cropHandleSide: _CropHandleSide.topRight);
-      } else if (_handle == _CropHandleSide.bottomLeft) {
-        _updateArea(
-            left: dx, bottom: dy, cropHandleSide: _CropHandleSide.bottomLeft);
-      } else if (_handle == _CropHandleSide.bottomRight) {
-        _updateArea(
-            right: dx, bottom: dy, cropHandleSide: _CropHandleSide.bottomRight);
-      }
     } else if (_action == _CropAction.moving) {
       final image = _image;
       if (image == null) {
